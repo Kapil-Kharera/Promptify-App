@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 import Form from "@components/Form";
 
 const CreatePrompt = () => {
+    const router = useRouter();
+    const { data: session} = useSession();
     const [submitting, setSubmitting] = useState(false);
     const [post, setPost] = useState({
         prompt: "",
@@ -22,13 +24,13 @@ const CreatePrompt = () => {
                 method: "POST",
                 body: JSON.stringify({
                     prompt: post.prompt,
-                    userId: sessionStorage?.user.id,
+                    userId: session?.user.id,
                     tag: post.tag
                 })
             });
 
             if(response.ok) {
-                Router.push("/");
+                router.push("/");
             }
         } catch (error) {
             console.log(error);
